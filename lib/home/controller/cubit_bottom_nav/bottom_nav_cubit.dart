@@ -1,3 +1,4 @@
+import 'package:advancednews/home/data/cache/cache_helper.dart';
 import 'package:advancednews/home/views/category_news_view.dart';
 import 'package:advancednews/home/views/every_thing_view.dart';
 import 'package:bloc/bloc.dart';
@@ -31,9 +32,15 @@ class BottomNavCubit extends Cubit<BottomNavState> {
     CategoryNewsView(category: 'science'),
   ];
   bool isDark = false;
-  ThemeMode appMode = ThemeMode.light;
-  void changeAppMode() {
-    isDark = !isDark;
-    emit(ChangeAppMode());
+  void changeAppMode({bool? fromShard}) {
+    if (fromShard != null) {
+      isDark = fromShard;
+      emit(ChangeAppMode());
+    } else {
+      isDark = !isDark;
+      CacheHelper.setBool('isDark', isDark).then((value) {
+        return emit(ChangeAppMode());
+      });
+    }
   }
 }
