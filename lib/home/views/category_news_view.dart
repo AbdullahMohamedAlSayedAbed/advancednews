@@ -17,7 +17,8 @@ class _CategoryNewsViewState extends State<CategoryNewsView> {
     setState(() {});
     super.initState();
   }
-    void didUpdateWidget(covariant CategoryNewsView oldWidget) {
+
+  void didUpdateWidget(covariant CategoryNewsView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.category != widget.category) {
       _fetchNews();
@@ -27,6 +28,7 @@ class _CategoryNewsViewState extends State<CategoryNewsView> {
   void _fetchNews() {
     ApiServersCubit.get(context).getNews(category: widget.category);
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ApiServersCubit, ApiServersState>(
@@ -36,12 +38,15 @@ class _CategoryNewsViewState extends State<CategoryNewsView> {
             news: state.news,
           );
         } else if (state is CategoryNewsFailure) {
+          print(state.errMessage);
           return Center(
             child: Text('Error: ${state.errMessage}'),
           );
         } else if (state is CategoryNewsLoading) {
           return const Center(
-            child: CircularProgressIndicator(color: Colors.deepOrange,),
+            child: CircularProgressIndicator(
+              color: Colors.deepOrange,
+            ),
           );
         }
         return const Text('data');
